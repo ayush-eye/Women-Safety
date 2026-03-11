@@ -14,7 +14,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
+import alertRoute from './routes/alert.route.js';
+
 app.use("/api/auth", userLoginRoute);
 app.use("/api/users",userRoutes);
+
+app.use("/api/alerts", alertRoute);
 
 export default app;
