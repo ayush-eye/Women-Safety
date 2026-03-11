@@ -17,6 +17,10 @@ const alertSchema = new mongoose.Schema(
         default: "SOS Emergency"
     },
 
+    mapLink: {
+        type: String
+    },
+
     status: {
         type: String,
         enum: ["active", "resolved"],
