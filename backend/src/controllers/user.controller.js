@@ -1,103 +1,34 @@
 import User from "../models/user.model.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-
-// Register User
-const registerUser = async (req, res) => {
-  try {
-
-    const { name, email, password } = req.body;
-
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword
-    });
-
-     const userobj = user.toObject();
-    delete userobj.password;
 
 
-    res.status(201).json({
-      message: "User registered successfully",
-      user: userobj
-    });
+export const getprofile = async (req,res)=>{
 
-  } catch (error) {
+    try{
 
-    res.status(500).json({
-      message: "Registration failed",
-      error: error.message
-    });
+        const userId = req.user.id;
+        const user = await User.findById(userId).select("-password -createdAt -updatedAt -__v");
 
-  }
-};
-
-
-// Login User
-const loginUser = async (req, res) => {
-
-  try {
-
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({
-        message: "User not found"
-      });
+        return res.status(200).json({ user });
     }
-
-    // compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(401).json({
-        message: "Invalid email or password"
-      });
+    catch(e)
+    {
+        return res.status(500).json({"message":"Something went Wrong"});
     }
+}
 
-    // create JWT token
-    const token = jwt.sign(
-      { 
-        id: user._id,
-        role: user.role
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "10d" }
-    );
+export const uploadProfile = async (req, res) =>
+{
+    const userId = req.user.id;
 
-    // store token in cookies
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      maxAge: 10 * 24 * 60 * 60 * 1000
-    });
+    const photoPath = `/uploads/${req.file.filename}`;
 
-    const userobj = user.toObject();
-    delete userobj.password;
+    const user = await User.findByIdAndUpdate(
+        userId,
+        { profilePhoto: photoPath }
+    ).select("-password");
 
     res.status(200).json({
-      message: "Login successful",
-      user: userobj
+        message: "Profile photo uploaded",
+        user
     });
-
-  }
-  catch (error) {
-
-    res.status(500).json({
-      message: "Login failed",
-      error: error.message
-    });
-
-  }
-};
-
-export {
-  registerUser,
-  loginUser
 };
