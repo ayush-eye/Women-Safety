@@ -15,6 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
+import alertRoute from './routes/alert.route.js';
+
+
 app.get("/voice", (req, res) =>
 {
     res.type("text/xml");
@@ -31,6 +34,8 @@ app.get("/voice", (req, res) =>
 
 app.use("/api/auth", userLoginRoute);
 app.use("/api/users",userRoutes);
+
+app.use("/api/alerts", alertRoute);
 app.use("/api/sos",sosRoutes);
 
 export default app;
