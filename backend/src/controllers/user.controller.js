@@ -17,9 +17,13 @@ const registerUser = async (req, res) => {
       password: hashedPassword
     });
 
+     const userobj = user.toObject();
+    delete userobj.password;
+
+
     res.status(201).json({
       message: "User registered successfully",
-      user
+      user: userobj
     });
 
   } catch (error) {
@@ -59,21 +63,27 @@ const loginUser = async (req, res) => {
 
     // create JWT token
     const token = jwt.sign(
-      { id: user._id },
+      { 
+        id: user._id,
+        role: user.role
+      },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "10d" }
     );
 
     // store token in cookies
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      maxAge: 24 * 60 * 60 * 1000
+      maxAge: 10 * 24 * 60 * 60 * 1000
     });
+
+    const userobj = user.toObject();
+    delete userobj.password;
 
     res.status(200).json({
       message: "Login successful",
-      user
+      user: userobj
     });
 
   }

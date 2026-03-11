@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const authMiddleware = (req, res, next) => {
+export const authMiddleware = (req, res, next) => {
 
   try {
 
@@ -30,4 +30,17 @@ const authMiddleware = (req, res, next) => {
 
 };
 
-export default authMiddleware;
+export const authorizeRole = (roles) =>
+{
+  return (req,res,next)=>
+  {
+      if(!roles.includes(req.user.role))
+      {
+        return res.status(403).json({
+          message:"Not Authorize to Access this"
+        })
+      }
+
+      next();
+  }
+}
