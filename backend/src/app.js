@@ -17,18 +17,17 @@ app.use(cookieParser());
 
 import alertRoute from './routes/alert.route.js';
 
-
-app.get("/voice", (req, res) =>
+app.all("/voice", (req, res) =>
 {
-    res.type("text/xml");
-
+    res.set("Content-Type", "text/xml");
+     const name = req.query.name || "The user";
     res.send(`
-        <Response>
-            <Say voice="alice">
-                Emergency alert. The user may be in danger. Please check immediately.
-            </Say>
-        </Response>
-    `);
+<Response>
+    <Say voice="alice">
+        Emergency alert. ${name} may be in danger. Please check immediately and view for the location send through sms and email.
+    </Say>
+</Response>
+`);
 });
 
 
