@@ -18,6 +18,33 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["USER","ADMIN"],
         default:"USER"
+    },
+    contact: 
+    {
+        type: String,
+        required: true,
+        trim: true
+    },
+    emergency_contacts:
+    [
+        {
+            name:
+            {
+                type: String,
+                required: true
+            },
+            contact:
+            {
+                type: String,
+                required: true,
+                trim: true
+            }
+        }
+    ],
+    profilePhoto:
+    {
+        type: String,
+        default: "/uploads/default-profile.png"
     }
 },
 {
