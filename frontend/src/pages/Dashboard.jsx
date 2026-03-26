@@ -156,8 +156,8 @@ const Dashboard = () => {
 
             <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 cursor-pointer">
               {/* Icon */}
-              <div className="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-blue-600 group-hover:scale-110 transition-transform duration-300">
-                <Navigation size={28} />
+              <div className="bg-green-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-green-600 group-hover:scale-110 transition-transform duration-300">
+                <Phone size={28} />
               </div>
 
               {/* Title */}
