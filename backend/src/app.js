@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.routes.js'
 import sosRoutes from './routes/sos.route.js'
 import safePlaceRoute from "./routes/safeplace.route.js";
+import dangerPlaceRoute from "./routes/dangerplace.route.js";
 
 const app = express();
 
@@ -42,5 +43,6 @@ app.use("/api/alerts", alertRoute);
 app.use("/api/sos", sosRoutes);
 
 app.use("/api/safeplaces", safePlaceRoute);
+app.use("/api/dangerplaces", dangerPlaceRoute);
 
 export default app;
