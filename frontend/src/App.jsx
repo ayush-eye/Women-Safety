@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
@@ -25,30 +30,30 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
-          <Route 
-            path="/dashboard" 
+
+          <Route
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/manage-contacts" 
+          <Route
+            path="/manage-contacts"
             element={
               <ProtectedRoute>
                 <ManageContacts />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/safe-places" 
+          <Route
+            path="/safe-places"
             element={
               <ProtectedRoute>
                 <SafePlaces />
               </ProtectedRoute>
-            } 
+            }
           />
 
           {/* Fallback route */}
