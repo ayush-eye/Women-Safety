@@ -1,4 +1,35 @@
+import axios from "axios";
 import SafePlace from "../models/safeplace.model.js";
+
+const SERP_API_KEY = "61ea29205b48b2124b8def6818afa131eb1aa813d9a66d94468fca49c5548a19";
+
+async function getPhoneFromSerp(name) {
+  try {
+    const query = `${name} Maharashtra police station phone`;
+
+    const res = await axios.get("https://serpapi.com/search", {
+      params: {
+        engine: "google",
+        q: query,
+        api_key: SERP_API_KEY
+      }
+    });
+
+    const data = res.data;
+
+    if (data.answer_box?.phone) return data.answer_box.phone;
+    if (data.knowledge_graph?.phone) return data.knowledge_graph.phone;
+
+    const text = JSON.stringify(data);
+    const match = text.match(/\+91[\d\s-]{10,}/g);
+
+    return match ? match[0] : null;
+
+  } catch (error) {
+    console.error("SerpAPI Error:", error.message);
+    return null;
+  }
+}
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371;
@@ -53,7 +84,6 @@ export const addSafePlace = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
       success: false,
       message: "Error storing safe place",
@@ -72,27 +102,79 @@ export const getNearbySafePlaces = async (req, res) => {
       });
     }
 
-    const safePlaces = await SafePlace.find();
+    // 🔥 1. Fetch from OSM
+    const overpassQuery = `
+    [out:json][timeout:25];
+    (
+      node["amenity"="police"](around:5000,${lat},${lng});
+      node["amenity"="hospital"](around:2000,${lat},${lng});
+      node["amenity"="clinic"](around:2000,${lat},${lng});
+    );
+    out;
+    `;
 
-    const nearbyPlaces = safePlaces.filter((place) => {
+    const osmRes = await axios.get(
+        "https://overpass.kumi.systems/api/interpreter",
+        {
+          params: { data: overpassQuery }
+        }
+      );
+  
+      const places = osmRes.data.elements;
+  
+      // 🔥 2. Enrich with phone
+      const apiResults = [];
+  
+      for (const place of places) {
+        let type = place.tags?.amenity || "safe_zone";
+        const name = place.tags?.name || `${type.charAt(0).toUpperCase() + type.slice(1)}`;
+        
+        const phone =
+          place.tags?.phone ||
+          place.tags?.["contact:phone"] ||
+          (await getPhoneFromSerp(`${name} ${place.tags?.["addr:city"] || ""}`)) ||
+          "112";
+  
+        apiResults.push({
+          name,
+          address: place.tags?.["addr:street"] || "Nearby Area",
+          type: type,
+          location: {
+            lat: place.lat,
+            lng: place.lon,
+          },
+          phone,
+          distance: calculateDistance(lat, lng, place.lat, place.lon).toFixed(2)
+        });
+  
+        // prevent rate limit - reducing wait to 500ms since we have more places
+        await new Promise(r => setTimeout(r, 500));
+      }
+
+    // 3. Combine with database places
+    const dbSafePlaces = await SafePlace.find();
+    const nearbyDbPlaces = dbSafePlaces.filter((place) => {
       const distance = calculateDistance(
         lat,
         lng,
         place.location.lat,
         place.location.lng,
       );
+      return distance <= 5;
+    }).map(p => ({
+        ...p._doc,
+        distance: calculateDistance(lat, lng, p.location.lat, p.location.lng).toFixed(2)
+    }));
 
-      return distance <= 3; // within 3km
-    });
+    const combinedPlaces = [...apiResults, ...nearbyDbPlaces];
 
     res.json({
       success: true,
-      count: nearbyPlaces.length,
-      safePlaces: nearbyPlaces,
+      count: combinedPlaces.length,
+      safePlaces: combinedPlaces,
     });
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
       success: false,
       message: "Error fetching nearby safe places",
