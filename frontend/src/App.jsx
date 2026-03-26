@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import SafePlaces from "./pages/SafePlaces";
 import ManageContacts from "./pages/ManageContacts";
 import AuthService from "./services/auth.service";
+import FakeCall from "./pages/FakeCall";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -52,6 +53,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <SafePlaces />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/fake-call"
+            element={
+              <ProtectedRoute>
+                <FakeCall />
               </ProtectedRoute>
             }
           />

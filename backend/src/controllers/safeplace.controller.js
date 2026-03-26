@@ -106,9 +106,9 @@ export const getNearbySafePlaces = async (req, res) => {
     const overpassQuery = `
     [out:json][timeout:25];
     (
-      node["amenity"="police"](around:5000,${lat},${lng});
-      node["amenity"="hospital"](around:2000,${lat},${lng});
-      node["amenity"="clinic"](around:2000,${lat},${lng});
+      node["amenity"="police"](around:15000,${lat},${lng});
+      node["amenity"="hospital"](around:15000,${lat},${lng});
+      node["amenity"="clinic"](around:15000,${lat},${lng});
     );
     out;
     `;
