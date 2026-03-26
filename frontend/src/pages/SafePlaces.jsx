@@ -110,11 +110,6 @@ const SafePlaces = () => {
     };
   }, [destination]);
 
-  useEffect(() => {
-    if (location) {
-        fetchNearby();
-    }
-  }, [location]);
 
   const fetchNearby = async () => {
     if (!location) return;

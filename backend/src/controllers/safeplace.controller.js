@@ -1,7 +1,7 @@
 import axios from "axios";
 import SafePlace from "../models/safeplace.model.js";
 
-const SERP_API_KEY = "61ea29205b48b2124b8def6818afa131eb1aa813d9a66d94468fca49c5548a19";
+const SERP_API_KEY = process.env.SERP_API_KEY;
 
 async function getPhoneFromSerp(name) {
   try {
@@ -106,9 +106,9 @@ export const getNearbySafePlaces = async (req, res) => {
     const overpassQuery = `
     [out:json][timeout:25];
     (
-      node["amenity"="police"](around:5000,${lat},${lng});
-      node["amenity"="hospital"](around:2000,${lat},${lng});
-      node["amenity"="clinic"](around:2000,${lat},${lng});
+      node["amenity"="police"](around:2000,${lat},${lng});
+      node["amenity"="hospital"](around:1000,${lat},${lng});
+      node["amenity"="clinic"](around:1000,${lat},${lng});
     );
     out;
     `;
@@ -120,7 +120,13 @@ export const getNearbySafePlaces = async (req, res) => {
         }
       );
   
-      const places = osmRes.data.elements;
+  
+      const places = osmRes.data?.elements || [];
+      console.log(`OSM found ${places.length} places.`);
+  
+      if (osmRes.data?.remark) {
+        console.warn("OSM Warning:", osmRes.data.remark);
+      }
   
       // 🔥 2. Enrich with phone
       const apiResults = [];
