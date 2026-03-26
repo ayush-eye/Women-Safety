@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Shield, LogOut, User, MapPin, Siren } from "lucide-react";
+import { Shield, LogOut, User, MapPin, Siren, Phone } from "lucide-react";
 import AuthService from "../services/auth.service";
 
 const Navbar = () => {
@@ -35,6 +35,13 @@ const Navbar = () => {
             >
               <MapPin size={18} />
               Safe Places
+            </Link>
+            <Link
+              to="/fake-call"
+              className="text-gray-700 hover:text-red-600 font-medium flex items-center gap-1 transition-colors"
+            >
+              <Phone size={18} />
+              Fake Call
             </Link>
             <div className="flex items-center gap-4 ml-4 pl-4 border-l border-gray-200">
               <span className="text-gray-600 font-medium">
