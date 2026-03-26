@@ -1,7 +1,7 @@
 import axios from "axios";
 import SafePlace from "../models/safeplace.model.js";
 
-const SERP_API_KEY = "61ea29205b48b2124b8def6818afa131eb1aa813d9a66d94468fca49c5548a19";
+const SERP_API_KEY = process.env.SERP_API_KEY;
 
 async function getPhoneFromSerp(name) {
   try {
@@ -11,8 +11,8 @@ async function getPhoneFromSerp(name) {
       params: {
         engine: "google",
         q: query,
-        api_key: SERP_API_KEY
-      }
+        api_key: SERP_API_KEY,
+      },
     });
 
     const data = res.data;
@@ -24,7 +24,6 @@ async function getPhoneFromSerp(name) {
     const match = text.match(/\+91[\d\s-]{10,}/g);
 
     return match ? match[0] : null;
-
   } catch (error) {
     console.error("SerpAPI Error:", error.message);
     return null;
@@ -106,65 +105,80 @@ export const getNearbySafePlaces = async (req, res) => {
     const overpassQuery = `
     [out:json][timeout:25];
     (
-      node["amenity"="police"](around:15000,${lat},${lng});
-      node["amenity"="hospital"](around:15000,${lat},${lng});
-      node["amenity"="clinic"](around:15000,${lat},${lng});
+      node["amenity"="police"](around:5000,${lat},${lng});
+      node["amenity"="hospital"](around:2000,${lat},${lng});
+      node["amenity"="clinic"](around:2000,${lat},${lng});
     );
     out;
     `;
 
     const osmRes = await axios.get(
-        "https://overpass.kumi.systems/api/interpreter",
-        {
-          params: { data: overpassQuery }
-        }
-      );
-  
-      const places = osmRes.data.elements;
-  
-      // 🔥 2. Enrich with phone
-      const apiResults = [];
-  
-      for (const place of places) {
-        let type = place.tags?.amenity || "safe_zone";
-        const name = place.tags?.name || `${type.charAt(0).toUpperCase() + type.slice(1)}`;
-        
-        const phone =
-          place.tags?.phone ||
-          place.tags?.["contact:phone"] ||
-          (await getPhoneFromSerp(`${name} ${place.tags?.["addr:city"] || ""}`)) ||
-          "112";
-  
-        apiResults.push({
-          name,
-          address: place.tags?.["addr:street"] || "Nearby Area",
-          type: type,
-          location: {
-            lat: place.lat,
-            lng: place.lon,
-          },
-          phone,
-          distance: calculateDistance(lat, lng, place.lat, place.lon).toFixed(2)
-        });
-  
-        // prevent rate limit - reducing wait to 500ms since we have more places
-        await new Promise(r => setTimeout(r, 500));
-      }
+      "https://overpass.kumi.systems/api/interpreter",
+      {
+        params: { data: overpassQuery },
+      },
+    );
+
+    const places = osmRes.data?.elements || [];
+    console.log(`OSM found ${places.length} places.`);
+
+    if (osmRes.data?.remark) {
+      console.warn("OSM Warning:", osmRes.data.remark);
+    }
+
+    // 🔥 2. Enrich with phone
+    const apiResults = [];
+
+    for (const place of places) {
+      let type = place.tags?.amenity || "safe_zone";
+      const name =
+        place.tags?.name || `${type.charAt(0).toUpperCase() + type.slice(1)}`;
+
+      const phone =
+        place.tags?.phone ||
+        place.tags?.["contact:phone"] ||
+        (await getPhoneFromSerp(
+          `${name} ${place.tags?.["addr:city"] || ""}`,
+        )) ||
+        "112";
+
+      apiResults.push({
+        name,
+        address: place.tags?.["addr:street"] || "Nearby Area",
+        type: type,
+        location: {
+          lat: place.lat,
+          lng: place.lon,
+        },
+        phone,
+        distance: calculateDistance(lat, lng, place.lat, place.lon).toFixed(2),
+      });
+
+      // prevent rate limit - reducing wait to 500ms since we have more places
+      await new Promise((r) => setTimeout(r, 500));
+    }
 
     // 3. Combine with database places
     const dbSafePlaces = await SafePlace.find();
-    const nearbyDbPlaces = dbSafePlaces.filter((place) => {
-      const distance = calculateDistance(
-        lat,
-        lng,
-        place.location.lat,
-        place.location.lng,
-      );
-      return distance <= 5;
-    }).map(p => ({
+    const nearbyDbPlaces = dbSafePlaces
+      .filter((place) => {
+        const distance = calculateDistance(
+          lat,
+          lng,
+          place.location.lat,
+          place.location.lng,
+        );
+        return distance <= 5;
+      })
+      .map((p) => ({
         ...p._doc,
-        distance: calculateDistance(lat, lng, p.location.lat, p.location.lng).toFixed(2)
-    }));
+        distance: calculateDistance(
+          lat,
+          lng,
+          p.location.lat,
+          p.location.lng,
+        ).toFixed(2),
+      }));
 
     const combinedPlaces = [...apiResults, ...nearbyDbPlaces];
 
