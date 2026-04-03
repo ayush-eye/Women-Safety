@@ -1,0 +1,5 @@
+Frontend:
+docker run -p 3000:80 ayusheye/women-safety-frontend:v1
+
+Backend:
+docker run -p 5000:5000 --env-file .env ayusheye/women-safety-backend:v1
