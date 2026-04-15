@@ -4,10 +4,14 @@ import { createAlert, getAlerts } from "../controllers/alert.controller.js";
 
 const router = express.Router();
 
-// router.post('/alerts', createAlert);
+/**
+ * - Create alert (Authenticated users)
+ */
 router.post('/alerts', authMiddleware, createAlert);
 
-//get alerts
+/**
+ * - Get all alerts (Admin only)
+ */
 router.get('/alerts', authMiddleware, getAlerts);
 
 

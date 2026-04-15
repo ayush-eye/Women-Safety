@@ -32,3 +32,23 @@ export const uploadProfile = async (req, res) =>
         user
     });
 };
+
+export const updateContacts = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { emergency_contacts } = req.body;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { emergency_contacts },
+            { new: true }
+        ).select("-password");
+
+        res.status(200).json({
+            message: "Emergency contacts updated successfully",
+            user
+        });
+    } catch (e) {
+        res.status(500).json({ message: "Failed to update contacts" });
+    }
+};
