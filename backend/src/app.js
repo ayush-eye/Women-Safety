@@ -6,6 +6,7 @@ import userRoutes from './routes/user.routes.js'
 import sosRoutes from './routes/sos.route.js'
 import safePlaceRoute from "./routes/safeplace.route.js";
 import dangerPlaceRoute from "./routes/dangerplace.route.js";
+import severityRoute from "./routes/severity.route.js";
 
 const app = express();
 
@@ -44,5 +45,6 @@ app.use("/api/sos", sosRoutes);
 
 app.use("/api/safeplaces", safePlaceRoute);
 app.use("/api/dangerplaces", dangerPlaceRoute);
+app.use("/api/severity", severityRoute);
 
 export default app;
