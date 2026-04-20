@@ -272,6 +272,29 @@ const Dashboard = () => {
                 <ArrowRight size={18} />
               </Link>
             </div>
+
+            {/* Criminal Detection Card */}
+            <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 cursor-pointer">
+              <div className="bg-red-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-5 text-red-600 group-hover:scale-110 transition-transform duration-300">
+                <Shield size={28} />
+              </div>
+
+              <h4 className="text-xl font-bold text-gray-900 mb-2">
+                Face Sentinel
+              </h4>
+
+              <p className="text-gray-500 text-sm leading-relaxed mb-5">
+                Intelligent Face Detection to scan suspects against offender databases.
+              </p>
+
+              <Link
+                to="/criminal-detection"
+                className="inline-flex items-center gap-2 text-red-600 font-semibold transition-all group-hover:gap-3"
+              >
+                Scan Now
+                <ArrowRight size={18} />
+              </Link>
+            </div>
           </div>
         </div>
 
