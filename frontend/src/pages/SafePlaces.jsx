@@ -121,9 +121,9 @@ const SafePlaces = () => {
     if (!location) return;
     setLoading(true);
     try {
-      const safeResponse = await axios.post("http://localhost:5000/api/safeplaces/nearby-safe-places", { lat: location.lat, lng: location.lng });
+      const safeResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/safeplaces/nearby-safe-places`, { lat: location.lat, lng: location.lng });
       setPlaces(safeResponse.data.safePlaces);
-      const dangerResponse = await axios.post("http://localhost:5000/api/dangerplaces/nearby-danger-places", { lat: location.lat, lng: location.lng });
+      const dangerResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/dangerplaces/nearby-danger-places`, { lat: location.lat, lng: location.lng });
       setDangerPlaces(dangerResponse.data.dangerPlaces);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -135,7 +135,7 @@ const SafePlaces = () => {
     setActiveTab('severity');
     setSeverityData(null);
     try {
-      const res = await axios.post("http://localhost:5000/api/severity/nearby", { lat: location.lat, lng: location.lng, radius: 1000 });
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/severity/nearby`, { lat: location.lat, lng: location.lng, radius: 1000 });
       setSeverityData(res.data);
       setShowHeatmap(true);
     } catch (err) { console.error(err); }
@@ -155,11 +155,11 @@ const SafePlaces = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 space-y-6 md:space-y-0">
         <div className="max-w-xl">
-          <h2 className="text-4xl font-black text-gray-900 tracking-tight leading-none mb-4">
-            Safety <span className="text-red-600">Navigator</span>
+          <h2 className="text-4xl font-black text-gray-900 tracking-tight mb-2">
+            Safe <span className="text-red-600">Places</span>
           </h2>
-          <p className="text-gray-500 text-lg leading-relaxed font-semibold">
-            Locate police stations, safe zones, and analyze area severity in real-time.
+          <p className="text-gray-500 font-semibold">
+            Locate police stations and safe zones near you.
           </p>
         </div>
 
