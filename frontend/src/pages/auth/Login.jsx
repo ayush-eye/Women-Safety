@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Shield, Eye, EyeOff, Lock, User, Siren, ArrowRight } from "lucide-react";
 import AuthService from "../../services/auth.service";
@@ -29,6 +29,13 @@ const LoginPage = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+  const user = AuthService.getCurrentUser();
+
+  if (user) {
+    navigate("/dashboard");
+  }
+}, []);
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-12 bg-gradient-to-br from-pink-50 via-white to-red-50">
       <div className="w-full max-w-lg bg-white p-10 rounded-3xl shadow-2xl relative overflow-hidden">
