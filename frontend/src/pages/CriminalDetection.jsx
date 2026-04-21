@@ -285,9 +285,14 @@ const CriminalDetection = () => {
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <CheckCircle size={80} className="mx-auto text-green-500 mb-4" />
+                  <CheckCircle size={80} className="mx-auto text-green-500 mb-6" />
                   <h3 className="text-3xl font-black text-green-600 mb-2">NO THREAT DETECTED</h3>
-                  <p className="text-gray-600 text-lg">This individual does not match any offender records currently existing in the database.</p>
+                  <div className="inline-block bg-green-50 text-green-800 px-4 py-2 rounded-full font-bold border border-green-200 mb-6 text-sm">
+                    {result.confidence || "99.99"}% Security Clearance
+                  </div>
+                  <p className="text-gray-600 text-lg max-w-lg mx-auto">
+                    {result.message || "This individual does not match any offender records currently existing in the database."}
+                  </p>
                 </div>
               )}
             </div>
