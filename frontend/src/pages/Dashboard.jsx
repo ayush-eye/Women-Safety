@@ -35,6 +35,78 @@ const Dashboard = () => {
     checkAndShowShortcutPrompt();
   }, []);
 
+  useEffect(() => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+
+  if (storedUser?.emergency_contacts) {
+    setContacts(storedUser.emergency_contacts);
+  }
+}, []);
+
+  const checkAndShowShortcutPrompt = () => {
+    // Check if shortcut has already been created
+    const shortcutCreated = localStorage.getItem("addToHomeScreen_created");
+    const dontShow = localStorage.getItem("addToHomeScreen_dontShow");
+    const lastShown = localStorage.getItem("addToHomeScreen_lastShown");
+
+    console.log("=== Shortcut Prompt Check ===");
+    console.log("shortcutCreated:", shortcutCreated);
+    console.log("dontShow:", dontShow);
+    console.log("lastShown:", lastShown);
+
+    // If shortcut already created, never show again
+    if (shortcutCreated === "true") {
+      console.log("❌ Shortcut already created, not showing popup");
+      return;
+    }
+
+    // If user selected "Don't show again" within the week
+    if (dontShow === "true") {
+      console.log(
+        "❌ User chose not to see again for a week, not showing popup",
+      );
+      return;
+    }
+
+    // Check if less than 7 days since last shown
+    if (lastShown) {
+      const lastShownDate = new Date(parseInt(lastShown));
+      const now = new Date();
+      const daysDiff = (now - lastShownDate) / (1000 * 60 * 60 * 24);
+      console.log("Days since last shown:", daysDiff);
+
+      if (daysDiff < 7) {
+        console.log(
+          `❌ Less than 7 days (${daysDiff.toFixed(2)} days) since last shown, not showing`,
+        );
+        return;
+      } else {
+        console.log(
+          `✓ More than 7 days (${daysDiff.toFixed(2)} days) since last shown, can show`,
+        );
+      }
+    } else {
+      console.log("✓ No lastShown record, first time showing");
+    }
+
+    // Show the prompt after a delay
+    console.log(
+      "✅ All conditions met! Showing shortcut prompt in 3 seconds...",
+    );
+    setTimeout(() => {
+      console.log("🎯 Setting showShortcutPrompt to true");
+      setShowShortcutPrompt(true);
+    }, 3000);
+  };
+
+  const handleShortcutCreated = () => {
+    console.log("=== Shortcut Created Callback ===");
+    // Mark that the shortcut has been created
+    localStorage.setItem("addToHomeScreen_created", "true");
+    console.log("✅ Set addToHomeScreen_created to true");
+    setShowShortcutPrompt(false);
+  };
+
   const handleSOS = async () => {
     setLoading(true);
     setAlertSent(false);
@@ -242,29 +314,32 @@ const Dashboard = () => {
               <Bell className="text-red-500" />
               Emergency Contacts
             </h3>
-            <div className="space-y-6">
-              {[1, 2].map((_, i) => (
-                <div
-                  key={i}
-                  className="flex gap-5 items-start bg-white/5 p-5 rounded-2xl border border-white/10"
-                >
-                  <div className="bg-red-500/20 p-3 rounded-xl text-red-500">
-                    <AlertTriangle size={24} />
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-white mb-1">
-                      Emergency Call
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      March 24, 2026 • 2:45 PM
-                    </p>
-                    <p className="text-xs mt-2 text-red-400 font-bold">
-                      SENT SUCCESSFULLY
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+           <div className="space-y-6">
+  {contacts.map((contact, i) => (
+    <div
+      key={i}
+      className="flex gap-5 items-start bg-white/5 p-5 rounded-2xl border border-white/10"
+    >
+      <div className="bg-red-500/20 p-3 rounded-xl text-red-500">
+        <AlertTriangle size={24} />
+      </div>
+
+      <div>
+        <div className="font-bold text-white mb-1">
+          {contact.name}
+        </div>
+
+        <div className="text-sm text-gray-400">
+          {contact.contact}
+        </div>
+
+        <div className="text-xs mt-2 text-red-400 font-bold">
+          SENT SUCCESSFULLY
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
             <button className="w-full mt-10 py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition-all">
               View All History
             </button>
