@@ -105,61 +105,83 @@ export const getNearbySafePlaces = async (req, res) => {
     const overpassQuery = `
     [out:json][timeout:25];
     (
-      node["amenity"="police"](around:5000,${lat},${lng});
-      node["amenity"="hospital"](around:2000,${lat},${lng});
-      node["amenity"="clinic"](around:2000,${lat},${lng});
+      nwr["amenity"="police"](around:5000,${lat},${lng});
+      nwr["amenity"="hospital"](around:5000,${lat},${lng});
+      nwr["amenity"="clinic"](around:3000,${lat},${lng});
     );
-    out;
+    out center 15;
     `;
 
-    const osmRes = await axios.get(
+    // Try multiple Overpass instances for reliability
+    const overpassInstances = [
+      "https://overpass-api.de/api/interpreter",
+      "https://lz4.overpass-api.de/api/interpreter",
       "https://overpass.kumi.systems/api/interpreter",
-      {
-        params: { data: overpassQuery },
-      },
-    );
+      "https://overpass.osm.ch/api/interpreter"
+    ];
 
-    const places = osmRes.data?.elements || [];
-    console.log(`OSM found ${places.length} places.`);
-
-    if (osmRes.data?.remark) {
-      console.warn("OSM Warning:", osmRes.data.remark);
+    let osmRes;
+    for (const url of overpassInstances) {
+      try {
+        console.log(`Attempting OSM fetch from: ${url}`);
+        osmRes = await axios.get(url, { 
+          params: { data: overpassQuery },
+          timeout: 10000,
+          headers: {
+            'User-Agent': 'SafeHerWomenSafetyApp/1.0'
+          }
+        });
+        if (osmRes.data?.elements && osmRes.data.elements.length > 0) break;
+      } catch (err) {
+        console.warn(`Overpass instance ${url} failed: ${err.message}`);
+      }
     }
 
-    // 🔥 2. Enrich with phone
-    const apiResults = [];
+    // Standardize coordinates for ways/relations (use 'center' property if present)
+    const rawPlaces = osmRes?.data?.elements || [];
+    const places = rawPlaces.map(p => {
+      if (p.type === 'way' || p.type === 'relation') {
+        return { ...p, lat: p.center.lat, lon: p.center.lon };
+      }
+      return p;
+    });
 
-    for (const place of places) {
+    console.log(`OSM found ${places.length} places.`);
+
+
+    // 🔥 2. Enrich with phone - Optimized Parallel Processing
+    const enrichmentPromises = places.slice(0, 10).map(async (place) => {
       let type = place.tags?.amenity || "safe_zone";
-      const name =
-        place.tags?.name || `${type.charAt(0).toUpperCase() + type.slice(1)}`;
+      const name = place.tags?.name || `${type.charAt(0).toUpperCase() + type.slice(1)}`;
 
-      const phone =
-        place.tags?.phone ||
-        place.tags?.["contact:phone"] ||
-        (await getPhoneFromSerp(
-          `${name} ${place.tags?.["addr:city"] || ""}`,
-        )) ||
-        "112";
+      let phone = place.tags?.phone || place.tags?.["contact:phone"];
+      
+      // Only call SerpAPI for the first 4 places to avoid long waits and rate limits
+      if (!phone && places.indexOf(place) < 4 && SERP_API_KEY) {
+        try {
+          phone = await getPhoneFromSerp(`${name} ${place.tags?.["addr:city"] || ""}`);
+        } catch (e) {
+          console.error("Serp fetch failed for", name);
+        }
+      }
 
-      apiResults.push({
+      return {
         name,
-        address: place.tags?.["addr:street"] || "Nearby Area",
+        address: place.tags?.["addr:street"] || place.tags?.["addr:full"] || "Nearby Area",
         type: type,
         location: {
           lat: place.lat,
           lng: place.lon,
         },
-        phone,
+        phone: phone || "112",
         distance: calculateDistance(lat, lng, place.lat, place.lon).toFixed(2),
-      });
+      };
+    });
 
-      // prevent rate limit - reducing wait to 500ms since we have more places
-      await new Promise((r) => setTimeout(r, 500));
-    }
+    const apiResults = await Promise.all(enrichmentPromises);
 
     // 3. Combine with database places
-    const dbSafePlaces = await SafePlace.find();
+    const dbSafePlaces = await SafePlace.find().limit(50);
     const nearbyDbPlaces = dbSafePlaces
       .filter((place) => {
         const distance = calculateDistance(
@@ -168,7 +190,7 @@ export const getNearbySafePlaces = async (req, res) => {
           place.location.lat,
           place.location.lng,
         );
-        return distance <= 5;
+        return distance <= 10; // 10km radius for DB places
       })
       .map((p) => ({
         ...p._doc,
@@ -180,18 +202,21 @@ export const getNearbySafePlaces = async (req, res) => {
         ).toFixed(2),
       }));
 
-    const combinedPlaces = [...apiResults, ...nearbyDbPlaces];
+    const combinedPlaces = [...apiResults, ...nearbyDbPlaces]
+      .sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
 
     res.json({
       success: true,
       count: combinedPlaces.length,
-      safePlaces: combinedPlaces,
+      safePlaces: combinedPlaces.slice(0, 20), // Limit total results for UI performance
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error in getNearbySafePlaces:", error);
     res.status(500).json({
       success: false,
       message: "Error fetching nearby safe places",
+      error: error.message
     });
   }
 };
+

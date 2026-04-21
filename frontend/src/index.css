@@ -42,6 +42,21 @@
     }
   }
 
+  @keyframes slide-down {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation-duration: 0.3s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+
+  .slide-in-from-top {
+    animation-name: slide-down;
+  }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
