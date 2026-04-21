@@ -286,12 +286,6 @@ const SafePlaces = () => {
                 <Shield size={15} /> SAFE
               </button>
               <button
-                onClick={() => setActiveTab('danger')}
-                className={`flex-1 py-2.5 px-2 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${activeTab === 'danger' ? 'bg-white shadow-md text-red-600' : 'text-gray-400'}`}
-              >
-                <AlertTriangle size={15} /> DANGER
-              </button>
-              <button
                 onClick={() => setActiveTab('severity')}
                 className={`flex-1 py-2.5 px-2 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${activeTab === 'severity' ? 'bg-white shadow-md text-purple-600' : 'text-gray-400'}`}
               >
@@ -368,19 +362,6 @@ const SafePlaces = () => {
 
                   {!severityLoading && severityData && sev && (
                     <>
-                      {/* ── SAFE / DANGER Verdict Banner ── */}
-                      <div className={`rounded-2xl p-5 flex items-center gap-4 ${severityData.isSafe ? 'bg-green-500' : 'bg-red-600'}`}>
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 ${severityData.isSafe ? 'bg-green-400' : 'bg-red-500'}`}>
-                          {severityData.isSafe ? '🛡️' : '⚠️'}
-                        </div>
-                        <div>
-                          <p className="text-white/70 text-[10px] font-black uppercase tracking-widest">Current Area Status</p>
-                          <p className="text-white text-2xl font-black leading-tight">
-                            {severityData.isSafe ? 'THIS PLACE IS SAFE' : 'THIS PLACE IS DANGEROUS'}
-                          </p>
-                        </div>
-                      </div>
-
                       {/* ── Time of Day Context ── */}
                       <div className="flex gap-2">
                         <div className={`flex-1 flex items-center gap-2 rounded-xl px-4 py-3 ${severityData.isNightTime ? 'bg-indigo-50 border border-indigo-200' : 'bg-amber-50 border border-amber-200'}`}>
