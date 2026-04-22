@@ -148,7 +148,7 @@ const Dashboard = () => {
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h2 className="text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
             Safety <span className="text-red-600">Dashboard</span>
           </h2>
           <div className="text-gray-500 text-lg mt-3 flex items-center gap-2">
@@ -178,7 +178,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Main Control Panel */}
         <div className="lg:col-span-8 space-y-10">
-          <div className="bg-white p-12 rounded-[2.5rem] shadow-2xl shadow-red-100 border border-red-50 relative overflow-hidden group">
+          <div className="bg-white p-6 md:p-12 rounded-[2.5rem] shadow-2xl shadow-red-100 border border-red-50 relative overflow-hidden group">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-50 rounded-full group-hover:scale-110 transition-transform duration-700"></div>
 
             <div className="relative z-10 text-center">
@@ -194,7 +194,7 @@ const Dashboard = () => {
                 <button
                   onClick={handleSOS}
                   disabled={loading}
-                  className={`w-72 h-72 rounded-full flex flex-col items-center justify-center gap-6 text-white font-black text-4xl shadow-[0_0_80px_rgba(220,38,38,0.4)] transition-all duration-500 active:scale-90 border-[15px] border-white ring-2 ring-red-100 ${
+                  className={`w-56 h-56 md:w-72 md:h-72 rounded-full flex flex-col items-center justify-center gap-4 md:gap-6 text-white font-black text-3xl md:text-4xl shadow-[0_0_80px_rgba(220,38,38,0.4)] transition-all duration-500 active:scale-90 border-[10px] md:border-[15px] border-white ring-2 ring-red-100 ${
                     alertSent
                       ? "bg-green-600 shadow-green-200"
                       : "bg-red-600 hover:bg-black group-active:animate-ping"
@@ -210,7 +210,7 @@ const Dashboard = () => {
                   ) : (
                     <>
                       <Siren
-                        size={80}
+                        size={64}
                         strokeWidth={2.5}
                         className="animate-pulse"
                       />
@@ -309,7 +309,7 @@ const Dashboard = () => {
 
         {/* Sidebar */}
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-black text-white p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+          <div className="bg-black text-white p-6 md:p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
             <h3 className="text-2xl font-black mb-8 flex items-center gap-4">
               <Bell className="text-red-500" />
               Emergency Contacts
@@ -345,7 +345,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          <div className="bg-red-600 p-10 rounded-[2.5rem] text-white shadow-2xl shadow-red-200">
+          <div className="bg-red-600 p-6 md:p-10 rounded-[2.5rem] text-white shadow-2xl shadow-red-200">
             <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <Phone size={32} />
             </div>
