@@ -101,7 +101,7 @@ const ManageContacts = () => {
                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-12">
                         <div>
                             <div className="bg-red-600 w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-xl shadow-red-200">
-                                <Heart className="text-white" size={24} className="md:w-8 md:h-8" />
+                                <Heart className="text-white md:w-8 md:h-8" size={24} />
                             </div>
                             <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
                                 Trusted <span className="text-red-600">Contacts</span>
