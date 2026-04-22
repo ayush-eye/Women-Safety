@@ -15,7 +15,7 @@ const ManageContacts = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/users/me", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
                 setContacts(response.data.user.emergency_contacts || []);
@@ -65,7 +65,7 @@ const ManageContacts = () => {
         setLoading(true);
         setMessage(null);
         try {
-            await axios.post("http://localhost:5000/api/users/update-contacts", {
+            await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/users/update-contacts`, {
                 emergency_contacts: formattedContacts
             }, {
                 headers: { Authorization: `Bearer ${user.token}` }

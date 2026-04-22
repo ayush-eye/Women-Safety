@@ -121,9 +121,9 @@ const SafePlaces = () => {
     if (!location) return;
     setLoading(true);
     try {
-      const safeResponse = await axios.post("http://localhost:5000/api/safeplaces/nearby-safe-places", { lat: location.lat, lng: location.lng });
+      const safeResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/safeplaces/nearby-safe-places`, { lat: location.lat, lng: location.lng });
       setPlaces(safeResponse.data.safePlaces);
-      const dangerResponse = await axios.post("http://localhost:5000/api/dangerplaces/nearby-danger-places", { lat: location.lat, lng: location.lng });
+      const dangerResponse = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/dangerplaces/nearby-danger-places`, { lat: location.lat, lng: location.lng });
       setDangerPlaces(dangerResponse.data.dangerPlaces);
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -135,7 +135,7 @@ const SafePlaces = () => {
     setActiveTab('severity');
     setSeverityData(null);
     try {
-      const res = await axios.post("http://localhost:5000/api/severity/nearby", { lat: location.lat, lng: location.lng, radius: 1000 });
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/severity/nearby`, { lat: location.lat, lng: location.lng, radius: 1000 });
       setSeverityData(res.data);
       setShowHeatmap(true);
     } catch (err) { console.error(err); }

@@ -17,7 +17,7 @@ const ManageCriminals = () => {
   const fetchCriminals = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("user"))?.token;
-      const response = await axios.get("http://localhost:5000/api/criminals", {
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/criminals`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCriminals(response.data);
@@ -42,7 +42,7 @@ const ManageCriminals = () => {
 
     try {
       const token = JSON.parse(localStorage.getItem("user"))?.token;
-      await axios.post("http://localhost:5000/api/criminals/add", formData, {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/criminals/add`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -123,7 +123,7 @@ const ManageCriminals = () => {
         {criminals.map((criminal) => (
           <div key={criminal._id} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
             <img
-              src={`http://localhost:5000/${criminal.photo}`}
+              src={`${import.meta.env.VITE_API_BASE_URL}/${criminal.photo}`}
               alt={criminal.name}
               className="h-56 w-full object-cover"
             />

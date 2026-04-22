@@ -28,7 +28,7 @@ const CriminalCheck = () => {
       formData.append("photo", selectedFile);
       const token = JSON.parse(localStorage.getItem("user"))?.token;
       const response = await axios.post(
-        "http://localhost:5000/api/criminals/identify",
+        `${import.meta.env.VITE_API_BASE_URL}/api/criminals/identify`,
         formData,
         {
           headers: {

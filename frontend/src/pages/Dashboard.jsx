@@ -112,7 +112,7 @@ const Dashboard = () => {
     setAlertSent(false);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/sos/sos-call",
+        `${import.meta.env.VITE_API_BASE_URL}/api/sos/sos-call`,
         {
           location: location,
         },

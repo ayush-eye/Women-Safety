@@ -56,8 +56,8 @@ const AdminDashboard = () => {
         };
 
         const endpoint = placeType === 'safe' 
-            ? "http://localhost:5000/api/safeplaces/add-safe-place" 
-            : "http://localhost:5000/api/dangerplaces/add-danger-place";
+            ? `${import.meta.env.VITE_API_BASE_URL}/api/safeplaces/add-safe-place` 
+            : `${import.meta.env.VITE_API_BASE_URL}/api/dangerplaces/add-danger-place`;
 
         try {
             const res = await axios.post(endpoint, data);
