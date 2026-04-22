@@ -286,12 +286,6 @@ const SafePlaces = () => {
                 <Shield size={15} /> SAFE
               </button>
               <button
-                onClick={() => setActiveTab('danger')}
-                className={`flex-1 py-2.5 px-2 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${activeTab === 'danger' ? 'bg-white shadow-md text-red-600' : 'text-gray-400'}`}
-              >
-                <AlertTriangle size={15} /> DANGER
-              </button>
-              <button
                 onClick={() => setActiveTab('severity')}
                 className={`flex-1 py-2.5 px-2 rounded-xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${activeTab === 'severity' ? 'bg-white shadow-md text-purple-600' : 'text-gray-400'}`}
               >
@@ -326,24 +320,6 @@ const SafePlaces = () => {
                     <div className="text-center py-10 opacity-50">
                       <Search size={40} className="mx-auto mb-2 text-gray-300" />
                       <p className="font-bold text-sm">No safe zones found yet.</p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* DANGER Tab */}
-              {activeTab === 'danger' && (
-                <div className="space-y-4">
-                  {dangerPlaces.length > 0 ? dangerPlaces.map((place, i) => (
-                    <div key={i} className="p-5 bg-red-50/50 rounded-2xl border border-transparent hover:border-red-200 transition-all shadow-sm">
-                      <h5 className="font-black text-lg text-red-600 mb-1 leading-tight">{place.name}</h5>
-                      <p className="text-xs text-gray-600 mb-3 font-semibold">{place.description}</p>
-                      <p className="text-[10px] font-black uppercase text-red-400 tracking-wider">High Risk Area</p>
-                    </div>
-                  )) : (
-                    <div className="text-center py-10 opacity-50">
-                      <AlertTriangle size={40} className="mx-auto mb-2 text-gray-300" />
-                      <p className="font-bold text-sm">No danger zones reported.</p>
                     </div>
                   )}
                 </div>
