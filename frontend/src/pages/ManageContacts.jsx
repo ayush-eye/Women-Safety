@@ -88,29 +88,29 @@ const ManageContacts = () => {
     }
 
     return (
-        <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-pink-50 via-white to-red-50 py-16 px-4">
+        <div className="min-h-[calc(100vh-80px)] bg-gradient-to-br from-pink-50 via-white to-red-50 py-6 md:py-16 px-4">
             <div className="max-w-3xl mx-auto">
-                <Link to="/dashboard" className="inline-flex items-center gap-2 text-gray-500 hover:text-red-600 font-bold mb-8 transition-colors group">
+                <Link to="/dashboard" className="hidden md:inline-flex items-center gap-2 text-gray-500 hover:text-red-600 font-bold mb-8 transition-colors group">
                     <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     Back to Dashboard
                 </Link>
 
-                <div className="bg-white rounded-[2.5rem] shadow-2xl p-10 md:p-14 border border-white relative overflow-hidden">
+                <div className="bg-white rounded-3xl md:rounded-[2.5rem] shadow-2xl p-6 md:p-14 border border-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-red-50 rounded-bl-full opacity-50 -mr-10 -mt-10"></div>
                     
-                    <div className="relative z-10 sm:flex justify-between items-end mb-12">
+                    <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-12">
                         <div>
-                            <div className="bg-red-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-red-200">
-                                <Heart className="text-white" size={32} />
+                            <div className="bg-red-600 w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-xl shadow-red-200">
+                                <Heart className="text-white" size={24} className="md:w-8 md:h-8" />
                             </div>
-                            <h2 className="text-4xl font-black text-gray-900 tracking-tight">
+                            <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
                                 Trusted <span className="text-red-600">Contacts</span>
                             </h2>
-                            <p className="text-gray-500 mt-2 text-lg">Your emergency notification circle</p>
+                            <p className="text-gray-500 mt-1 md:mt-2 text-base md:text-lg">Your emergency notification circle</p>
                         </div>
                         <button 
                             onClick={handleAddContact}
-                            className="mt-6 sm:mt-0 flex items-center gap-2 bg-black text-white px-6 py-4 rounded-2xl font-bold hover:bg-red-600 transition-all hover:scale-105 active:scale-95 shadow-lg"
+                            className="w-full md:w-auto flex items-center justify-center gap-2 bg-black text-white px-6 py-4 rounded-2xl font-bold hover:bg-red-600 transition-all hover:scale-105 active:scale-95 shadow-lg"
                         >
                             <Plus size={20} strokeWidth={3} />
                             Add Contact
@@ -176,11 +176,11 @@ const ManageContacts = () => {
                             </div>
                         )}
 
-                        <div className="pt-10 flex gap-4">
+                        <div className="pt-6 md:pt-10 flex gap-4">
                             <button
                                 type="submit"
                                 disabled={loading || contacts.length === 0}
-                                className="flex-grow bg-red-600 hover:bg-black text-white font-black py-5 rounded-[2rem] transition-all duration-500 shadow-2xl shadow-red-200 hover:shadow-black/20 flex items-center justify-center gap-3 text-xl disabled:bg-gray-300 disabled:shadow-none"
+                                className="flex-grow bg-red-600 hover:bg-black text-white font-black py-4 md:py-5 rounded-2xl md:rounded-[2rem] transition-all duration-500 shadow-2xl shadow-red-200 hover:shadow-black/20 flex items-center justify-center gap-3 text-lg md:text-xl disabled:bg-gray-300 disabled:shadow-none"
                             >
                                 {loading ? (
                                     <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>

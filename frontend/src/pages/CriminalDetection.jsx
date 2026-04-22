@@ -136,28 +136,28 @@ const CriminalDetection = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 md:px-8 bg-gray-50 min-h-[calc(100vh-80px)]">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+    <div className="max-w-7xl mx-auto px-4 py-6 md:py-12 md:px-8 bg-gray-50 min-h-[calc(100vh-80px)]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 md:mb-12">
         <div>
-          <h2 className="text-5xl font-black text-gray-900 tracking-tight flex items-center gap-4">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight flex items-center gap-3">
             Face <span className="text-red-600">Sentinel</span>
-            <ShieldAlert size={40} className="text-red-600" />
+            <ShieldAlert size={32} className="text-red-600 md:w-10 md:h-10" />
           </h2>
-          <p className="text-gray-500 text-lg mt-3">
-            Intelligent Criminal Face Detection Module for Women Safety
+          <p className="text-gray-500 text-sm md:text-lg mt-2">
+            Intelligent Face Detection for offender identification
           </p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-10">
+      <div className="max-w-4xl mx-auto space-y-6 md:space-y-10">
         {/* Detection Panel */}
-        <div className="space-y-10">
-          <div className="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-red-100 border border-red-50 text-center">
-            <h3 className="text-3xl font-black text-gray-900 mb-4">
+        <div className="space-y-6 md:space-y-10">
+          <div className="bg-white p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] shadow-xl shadow-red-100 border border-red-50 text-center">
+            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-3">
               Scan Suspect
             </h3>
-            <p className="text-gray-500 mb-8">
-              Upload a clear photo to check against our database of past offenders in the region.
+            <p className="text-gray-500 text-sm md:text-base mb-6 md:mb-8">
+              Upload or capture a photo to check against offender database.
             </p>
 
             <div className="flex gap-4 mb-8 justify-center">
@@ -252,14 +252,14 @@ const CriminalDetection = () => {
 
           {/* Results Panel */}
           {result && (
-            <div className={`p-8 rounded-[2rem] border-2 shadow-2xl transition-all animate-in fade-in slide-in-from-bottom-4 duration-500 ${
+            <div className={`p-6 md:p-8 rounded-3xl md:rounded-[2rem] border-2 shadow-2xl transition-all animate-in fade-in slide-in-from-bottom-4 duration-500 ${
               result.match ? "bg-white border-red-500 shadow-red-200" : "bg-white border-green-500 shadow-green-200"
             }`}>
               {result.match ? (
                 <div>
-                  <div className="flex items-center gap-3 text-red-600 mb-6">
-                    <UserX size={40} className="animate-pulse" />
-                    <h3 className="text-3xl font-black">MATCH FOUND</h3>
+                  <div className="flex items-center gap-3 text-red-600 mb-4 md:mb-6">
+                    <UserX size={32} className="md:w-10 md:h-10 animate-pulse" />
+                    <h3 className="text-2xl md:text-3xl font-black">MATCH FOUND</h3>
                   </div>
                   <div className="bg-red-50 text-red-800 p-4 rounded-xl border border-red-200 mb-6 font-bold flex justify-between items-center">
                     <span>Database Match Alert!</span>

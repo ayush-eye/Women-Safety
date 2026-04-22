@@ -150,51 +150,50 @@ const SafePlaces = () => {
   const sev = severityData ? (SEV_STYLES[severityData.severityLabel] || SEV_STYLES.Low) : null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 bg-gray-50 min-h-[calc(100vh-80px)]">
-
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 bg-gray-50 min-h-[calc(100vh-80px)]">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 space-y-6 md:space-y-0">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-8 md:mb-10 space-y-6 lg:space-y-0">
         <div className="max-w-xl">
-          <h2 className="text-4xl font-black text-gray-900 tracking-tight leading-none mb-4">
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight leading-none mb-3">
             Safety <span className="text-red-600">Navigator</span>
           </h2>
-          <p className="text-gray-500 text-lg leading-relaxed font-semibold">
-            Locate police stations, safe zones, and analyze area severity in real-time.
+          <p className="text-gray-500 text-sm md:text-lg leading-relaxed font-semibold">
+            Locate police stations and analyze area severity in real-time.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3 items-center">
+        <div className="grid grid-cols-2 sm:flex flex-wrap gap-2 md:gap-3 items-center">
           {destination && (
-            <button onClick={() => setDestination(null)} className="bg-black text-white px-5 py-4 rounded-3xl font-black flex items-center gap-2">
-              <X size={18} /> CLEAR ROUTE
+            <button onClick={() => setDestination(null)} className="col-span-2 sm:col-span-1 bg-black text-white px-4 py-3 md:px-5 md:py-4 rounded-2xl md:rounded-3xl font-black flex items-center justify-center gap-2 text-sm md:text-base">
+              <X size={16} /> CLEAR ROUTE
             </button>
           )}
           {severityData && (
             <button
               onClick={() => setShowHeatmap(v => !v)}
-              className={`px-5 py-4 rounded-3xl font-black flex items-center gap-2 border-2 transition-all ${showHeatmap ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-purple-600 border-purple-300'}`}
+              className={`px-4 py-3 md:px-5 md:py-4 rounded-2xl md:rounded-3xl font-black flex items-center justify-center gap-2 border-2 transition-all text-sm md:text-base ${showHeatmap ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-purple-600 border-purple-300'}`}
             >
-              {showHeatmap ? <EyeOff size={18} /> : <Eye size={18} />}
-              {showHeatmap ? 'HIDE MAP' : 'SHOW MAP'}
+              {showHeatmap ? <EyeOff size={16} /> : <Eye size={16} />}
+              MAP
             </button>
           )}
           <button
             onClick={fetchSeverity}
             disabled={severityLoading || !location}
-            className="bg-purple-600 hover:bg-purple-800 text-white font-black px-7 py-4 rounded-3xl shadow-xl shadow-purple-100 transition-all transform active:scale-95 flex items-center gap-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-purple-600 hover:bg-purple-800 text-white font-black px-4 py-3 md:px-7 md:py-4 rounded-2xl md:rounded-3xl shadow-xl shadow-purple-100 transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {severityLoading
-              ? <div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin" />
-              : <><Flame size={20} strokeWidth={3} /> SEVERITY SCAN</>}
+              ? <div className="w-4 h-4 md:w-5 md:h-5 border-4 border-white border-t-transparent rounded-full animate-spin" />
+              : <><Flame size={18} strokeWidth={3} /> SEVERITY</>}
           </button>
           <button
             onClick={fetchNearby}
             disabled={loading || !location}
-            className="bg-red-600 hover:bg-black text-white font-black px-7 py-4 rounded-3xl shadow-xl shadow-red-100 transition-all transform active:scale-95 flex items-center gap-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-red-600 hover:bg-black text-white font-black px-4 py-3 md:px-7 md:py-4 rounded-2xl md:rounded-3xl shadow-xl shadow-red-100 transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
-              ? <div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin" />
-              : <><SearchIcon size={20} strokeWidth={3} /> SCAN NEARBY</>}
+              ? <div className="w-4 h-4 md:w-5 md:h-5 border-4 border-white border-t-transparent rounded-full animate-spin" />
+              : <><SearchIcon size={18} strokeWidth={3} /> NEARBY</>}
           </button>
         </div>
       </div>
@@ -202,8 +201,8 @@ const SafePlaces = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
         {/* Map */}
-        <div className="lg:col-span-8 bg-white p-4 rounded-[2rem] shadow-2xl border-4 border-white min-h-[600px] relative overflow-hidden">
-          <MapContainer center={mapCenter} zoom={13} style={{ height: '600px', width: '100%', borderRadius: '1.5rem' }}>
+        <div className="lg:col-span-8 bg-white p-2 md:p-4 rounded-3xl md:rounded-[2rem] shadow-2xl border-2 md:border-4 border-white min-h-[400px] md:min-h-[600px] relative overflow-hidden">
+          <MapContainer center={mapCenter} zoom={13} style={{ height: window.innerWidth < 768 ? '400px' : '600px', width: '100%', borderRadius: '1.5rem' }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -275,7 +274,7 @@ const SafePlaces = () => {
 
         {/* Sidebar */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col h-[600px]">
+          <div className="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2rem] shadow-xl border border-gray-100 flex flex-col min-h-[400px] md:h-[600px]">
 
             {/* Tabs */}
             <div className="flex gap-1 mb-6 bg-gray-50 p-1 rounded-2xl">

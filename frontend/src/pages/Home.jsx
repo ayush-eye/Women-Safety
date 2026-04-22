@@ -5,25 +5,25 @@ export default function Home() {
   return (
     <div className="bg-white selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative pt-24 pb-32 lg:pt-36 lg:pb-52 overflow-hidden bg-gradient-to-br from-pink-50 via-white to-red-50">
+      <section className="relative pt-16 pb-24 lg:pt-36 lg:pb-52 overflow-hidden bg-gradient-to-br from-pink-50 via-white to-red-50">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-bl from-red-100/30 to-transparent rounded-bl-[100px] pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div className="flex flex-col space-y-10">
-              <div className="inline-flex items-center gap-2 bg-red-50 px-4 py-2 rounded-full border border-red-100/50 w-fit animate-fade-in shrink-0">
-                <span className="relative flex h-2.5 w-2.5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="flex flex-col space-y-6 md:space-y-10">
+              <div className="inline-flex items-center gap-2 bg-red-50 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-red-100/50 w-fit animate-fade-in shrink-0">
+                <span className="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-red-600"></span>
                 </span>
-                <span className="text-red-700 font-black text-sm tracking-widest uppercase">Global Safety Protocol Active</span>
+                <span className="text-red-700 font-black text-[10px] md:text-sm tracking-widest uppercase">Global Safety Protocol Active</span>
               </div>
 
-              <h1 className="text-6xl md:text-8xl font-black text-gray-900 leading-[0.9] tracking-tighter">
+              <h1 className="text-5xl md:text-8xl font-black text-gray-900 leading-[0.95] md:leading-[0.9] tracking-tighter">
                 Your Safety, <br/>
                 <span className="bg-gradient-to-r from-red-600 to-pink-500 bg-clip-text text-transparent">Reimagined.</span>
               </h1>
 
-              <p className="text-xl text-gray-500 max-w-lg leading-relaxed font-medium">
+              <p className="text-lg md:text-xl text-gray-500 max-w-lg leading-relaxed font-medium">
                 SafeHer leverages AI-driven location intelligence to keep you protected. Instantly alert contacts and find secure zones in seconds.
               </p>
 
@@ -161,21 +161,21 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-40">
+      <section className="py-24 md:py-40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-red-600 to-pink-500 rounded-[5rem] p-16 lg:p-24 text-center text-white relative overflow-hidden shadow-2xl shadow-red-200">
+          <div className="bg-gradient-to-br from-red-600 to-pink-500 rounded-3xl md:rounded-[5rem] p-8 md:p-24 text-center text-white relative overflow-hidden shadow-2xl shadow-red-200">
              <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
              <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/10 rounded-full -ml-48 -mb-48 blur-3xl"></div>
              
-             <div className="relative z-10 space-y-12">
-               <div className="bg-white/20 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-xl backdrop-blur-md">
-                 <Shield size={48} />
+             <div className="relative z-10 space-y-8 md:space-y-12">
+               <div className="bg-white/20 w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-6 md:mb-10 shadow-xl backdrop-blur-md">
+                 <Shield size={32} className="md:w-12 md:h-12" />
                </div>
-               <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-none mb-10">
+               <h2 className="text-3xl md:text-7xl font-black tracking-tighter leading-none mb-6 md:mb-10">
                  Peace of Mind is <br className="hidden md:block"/> Just One Click Away.
                </h2>
-               <div className="flex flex-col sm:flex-row justify-center gap-6">
-                 <Link to="/register" className="bg-white text-red-600 font-black px-12 py-6 rounded-3xl text-xl hover:bg-black hover:text-white transition-all transform hover:-translate-y-2 active:scale-95 shadow-2xl">
+               <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6">
+                 <Link to="/register" className="bg-white text-red-600 font-black px-8 py-4 md:px-12 md:py-6 rounded-2xl md:rounded-3xl text-lg md:text-xl hover:bg-black hover:text-white transition-all transform hover:-translate-y-2 active:scale-95 shadow-2xl">
                    Join the Movement
                  </Link>
                  <Link to="/login" className="bg-black/20 backdrop-blur-md border-2 border-white/30 text-white font-black px-12 py-6 rounded-3xl text-xl hover:bg-white/10 transition-all">

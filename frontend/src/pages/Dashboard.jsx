@@ -134,7 +134,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 md:px-8 bg-gray-50 min-h-[calc(100vh-80px)]">
+    <div className="max-w-7xl mx-auto px-4 py-6 md:py-12 md:px-8 bg-gray-50 min-h-[calc(100vh-80px)]">
       {/* Add the shortcut prompt */}
       {showShortcutPrompt && (
         <AddToHomeScreen
@@ -146,28 +146,28 @@ const Dashboard = () => {
         />
       )}
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 md:mb-12">
         <div>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
             Safety <span className="text-red-600">Dashboard</span>
           </h2>
-          <div className="text-gray-500 text-lg mt-3 flex items-center gap-2">
-            Welcome back,{" "}
-            <span className="font-bold text-gray-700">{user?.name}</span>
+          <div className="text-gray-500 text-base md:text-lg mt-2 flex items-center gap-2">
+            Welcome,{" "}
+            <span className="font-bold text-gray-700">{user?.name?.split(' ')[0]}</span>
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block"></span>
           </div>
         </div>
 
         <div className="flex gap-4">
-          <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 px-6">
+          <div className="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 md:gap-4 px-4 md:px-6">
             <div className="bg-red-50 p-2 rounded-xl text-red-600">
-              <MapPin size={24} />
+              <MapPin size={20} className="md:w-6 md:h-6" />
             </div>
             <div>
-              <div className="text-xs font-bold text-gray-400 tracking-wider">
+              <div className="text-[10px] md:text-xs font-bold text-gray-400 tracking-wider">
                 STATUS
               </div>
-              <div className="text-sm font-bold text-gray-800">
+              <div className="text-xs md:text-sm font-bold text-gray-800">
                 Tracking Active
               </div>
             </div>
@@ -175,10 +175,10 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10">
         {/* Main Control Panel */}
-        <div className="lg:col-span-8 space-y-10">
-          <div className="bg-white p-6 md:p-12 rounded-[2.5rem] shadow-2xl shadow-red-100 border border-red-50 relative overflow-hidden group">
+        <div className="lg:col-span-8 space-y-6 md:space-y-10">
+          <div className="bg-white p-6 md:p-12 rounded-3xl md:rounded-[2.5rem] shadow-2xl shadow-red-100 border border-red-50 relative overflow-hidden group">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-50 rounded-full group-hover:scale-110 transition-transform duration-700"></div>
 
             <div className="relative z-10 text-center">
@@ -309,7 +309,7 @@ const Dashboard = () => {
 
         {/* Sidebar */}
         <div className="lg:col-span-4 space-y-10">
-          <div className="bg-black text-white p-6 md:p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+          <div className="bg-black text-white p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] shadow-2xl relative overflow-hidden">
             <h3 className="text-2xl font-black mb-8 flex items-center gap-4">
               <Bell className="text-red-500" />
               Emergency Contacts
@@ -345,7 +345,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          <div className="bg-red-600 p-6 md:p-10 rounded-[2.5rem] text-white shadow-2xl shadow-red-200">
+          <div className="bg-red-600 p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] text-white shadow-2xl shadow-red-200">
             <div className="bg-white/20 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <Phone size={32} />
             </div>
