@@ -112,18 +112,27 @@ export const getNearbySafePlaces = async (req, res) => {
     out;
     `;
 
-    const osmRes = await axios.get(
-      "https://overpass.kumi.systems/api/interpreter",
-      {
-        params: { data: overpassQuery },
-      },
-    );
+    let places = [];
+    try {
+      const osmRes = await axios.post(
+        "https://overpass-api.de/api/interpreter",
+        `data=${encodeURIComponent(overpassQuery)}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "WomenSafetyApp/1.0 (contact@example.com)"
+          }
+        }
+      );
+      places = osmRes.data?.elements || [];
+      console.log(`OSM found ${places.length} places.`);
 
-    const places = osmRes.data?.elements || [];
-    console.log(`OSM found ${places.length} places.`);
-
-    if (osmRes.data?.remark) {
-      console.warn("OSM Warning:", osmRes.data.remark);
+      if (osmRes.data?.remark) {
+        console.warn("OSM Warning:", osmRes.data.remark);
+      }
+    } catch (osmError) {
+      console.error("OSM API Rate Limited or Failed:", osmError.message);
+      console.log("Falling back to database-only results...");
     }
 
     // 🔥 2. Enrich with phone
