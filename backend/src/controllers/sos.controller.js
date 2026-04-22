@@ -99,6 +99,7 @@ export const calluser = async (req, res) =>
 {
     try
     {
+        const { location } = req.body;
         const user = await User.findById(req.user.id);
         if (!user) {
           return res.status(404).json({ success: false, message: "User not found" });
@@ -119,11 +120,17 @@ export const calluser = async (req, res) =>
 
         // send SMS to all contacts
         console.log("Sending SMS to contacts...");
+        
+        let messageBody = `🚨 SOS ALERT: ${userName} may be in danger. Please contact immediately.`;
+        if (location && location.lat && location.lng) {
+            messageBody += `\nLocation: https://www.google.com/maps?q=${location.lat},${location.lng}`;
+        }
+
         for(const phone of contacts)
         {
             try {
               await client.messages.create({
-                  body:`🚨 SOS ALERT: ${userName} may be in danger. Please contact immediately.`,
+                  body: messageBody,
                   from:process.env.TWILIO_PHONE,
                   to:phone
               });
